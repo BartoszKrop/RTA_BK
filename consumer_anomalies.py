@@ -1,0 +1,32 @@
+from kafka import KafkaConsumer
+from collections import defaultdict
+import json
+import time
+
+consumer = KafkaConsumer(
+    'transactions',
+    bootstrap_servers='broker:9092',
+    group_id='anomaly_detector_group',
+    value_deserializer=lambda x: json.loads(x.decode('utf-8'))
+)
+
+user_history = defaultdict(list)
+
+TIME_WINDOW_SEC = 60
+MAX_TRANSACTIONS = 3
+
+
+for message in consumer:
+    data = message.value
+    user_id = data.get('user_id')
+    
+    if not user_id:
+        continue 
+        
+    current_time = time.time()
+    
+    user_history[user_id].append(current_time)
+    user_history[user_id] = [t for t in user_history[user_id] if current_time - t <= TIME_WINDOW_SEC]
+    
+    if len(user_history[user_id]) > MAX_TRANSACTIONS:
+        print(f"🚨 ALERT PODEJRZANEJ AKTYWNOŚCI: Użytkownik {user_id} wykonał {len(user_history[user_id])} transakcji w ciągu ostatnich 60 sekund!")
