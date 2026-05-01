@@ -14,7 +14,7 @@ user_history = defaultdict(list)
 TIME_WINDOW_SEC = 60
 MAX_TRANSACTIONS = 3
 
-print("Rozpoczynam dyskretne monitorowanie anomalii (Velocity Check)...")
+print("Rozpoczynam dyskretne monitorowanie anomalii...")
 
 for message in consumer:
     data = message.value
@@ -33,4 +33,4 @@ for message in consumer:
     
     # Alert tylko w momencie przekroczenia limitu
     if len(user_history[user_id]) > MAX_TRANSACTIONS:
-        print(f"🚨 ALERT PODEJRZANEJ AKTYWNOŚCI: Użytkownik {user_id} wykonał {len(user_history[user_id])} transakcji w ciągu ostatnich 60 sekund!")
+        print(f"ALERT PODEJRZANEJ AKTYWNOŚCI: Użytkownik {user_id} wykonał {len(user_history[user_id])} transakcji w ciągu ostatnich 60 sekund!")
