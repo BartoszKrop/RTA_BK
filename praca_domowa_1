@@ -3,6 +3,7 @@ from collections import defaultdict
 import json
 import time
 
+
 consumer = KafkaConsumer(
     'transactions',
     bootstrap_servers='broker:9092',
