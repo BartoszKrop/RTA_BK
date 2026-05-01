@@ -1,3 +1,4 @@
+%%file consumer_anomalies.py
 from kafka import KafkaConsumer
 from collections import defaultdict
 import json
